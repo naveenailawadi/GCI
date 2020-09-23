@@ -115,3 +115,32 @@ class DataExtender:
             return None
 
         # get the important data
+
+
+# make a PDL bot to get people's data based on linkedin and name
+class PDLbot:
+    def __init__(self, pdl_key):
+        self.pdl_key = pdl_key
+        self.root = f"https://api.peopledatalabs.com/v5/person?pretty=true&api_key={self.pdl_key}&"
+
+    # make a function to get people based on some params
+    def get_data(self, params):
+        raw = requests.get(self.root, params=params)
+        if '200' in str(raw):
+            print('Request successful')
+            data = raw.json()['data']
+
+            return data
+        elif '400' in str(raw):
+            return None
+        else:
+            return None
+
+    # make a function to get people based on name and linkedin
+    def get_on_name_and_linkedin(self, first_name, last_name, linkedin):
+        params = {'first_name': first_name,
+                  'last_name': last_name, 'profile': linkedin}
+
+        data = self.get_data(params)
+
+        return data
