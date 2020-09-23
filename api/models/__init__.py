@@ -1,6 +1,7 @@
 from api import db
 from api import bcrypt
 from api.admin_config import ADMIN_PROFILE
+from datetime import datetime as dt
 
 
 # create a user model
@@ -39,10 +40,18 @@ def validate_admin(email, password):
         return True
 
 
+# create a function to handle datetimes
+def check_dt(value):
+    if type(value) is dt:
+        value = value.strftime('%s')
+
+    return value
+
+
 def object_as_dict(obj):
     obj_dict = {c.key: getattr(obj, c.key)
                 for c in db.inspect(obj).mapper.column_attrs}
 
-    obj_dict['previous_activity_date'] = obj_dict['previous_activity_date'].strftime(
-        '%s')
+    # format datetimes
+    obj_dict = {key: check_dt(value) for key, value in obj_dict.items()}
     return obj_dict

@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from api.resources import load_json, validate_admin_token, load_header_token, TOKEN_MINUTES
-from api.models import db, UserModel, validate_admin
+from api.models import db, UserModel, validate_admin, object_as_dict
 from api.models.alumni import *
 
 
@@ -24,7 +24,7 @@ class AlumniAdditionResource(Resource):
 
         # check if the alumni exists
         test_alumni = AlumniModel.query.filter_by(
-            first_name=first_name).first()
+            first_name=first_name).filter_by(last_name).first()
 
         if test_alumni:
             return {'message': f"There is already an account associated with {last_name}, {first_name}."}, 403
@@ -175,16 +175,16 @@ class AlumniAdditionResource(Resource):
 class AlumniAccessResource(Resource):
     def get(self):
 
-        data = load_json()
+        token = load_header_token()
 
-        message, error_code = validate_admin_token(data['token'])
+        message, error_code = validate_admin_token(token)
 
         if message:
             return message, error_code
 
         # get the data
         try:
-            alumni = [{'first_name': person.first_name, 'last_name': person.last_name}
+            alumni = [object_as_dict(person)
                       for person in AlumniModel.query.all()]
 
             return {'alumni': alumni}, 201
