@@ -7,7 +7,7 @@ import sys
 
 # set the names of the columns with data
 NAME_COL = 'Name'
-LINKEDIN_COL = 'LinkedIn'
+LINKEDIN_COL = 'linkedin_url'
 
 
 # make a function that handles keyerrors
@@ -42,6 +42,7 @@ def safe_export(extrapolated_data, filename):
         "emails": [safe_extract(entry, "emails") for entry in extrapolated_data],
         "interests": [safe_extract(entry, "interests") for entry in extrapolated_data],
         "experience": [safe_extract(entry, "experience") for entry in extrapolated_data],
+        "education": [safe_extract(entry, "education") for entry in extrapolated_data],
         "profiles": [safe_extract(entry, "profiles") for entry in extrapolated_data]
     })
 
@@ -63,9 +64,8 @@ def main(filename):
 
     # iterate through the rows to get the data entries
     for index, row in df.iterrows():
-        names = row[NAME_COL].split(' ')
-        first_name = names[0]
-        last_name = names[-1]
+        first_name = row['first_name']
+        last_name = row['last_name']
         linkedin = row[LINKEDIN_COL]
 
         # get the info
