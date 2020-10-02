@@ -1,7 +1,12 @@
 import requests
 import telegram
+from telegram.error import TimedOut
 from telegram import Bot
 from jinja2 import Template
+
+
+# set max retries
+MAX_RETRIES = 3
 
 
 class Messenger:
@@ -26,6 +31,11 @@ class Messenger:
         # format the text using a jinja
         text = template.render(info_json, information=info_json)
 
-        self.bot.send_message(chat_id=self.chat_id,
-                              text=text,
-                              parse_mode=telegram.ParseMode.HTML)
+        for i in range(MAX_RETRIES):
+            try:
+                self.bot.send_message(chat_id=self.chat_id,
+                                      text=text,
+                                      parse_mode=telegram.ParseMode.HTML)
+                break
+            except TimedOut:
+                pass
