@@ -5,7 +5,8 @@ from api.resources.Admin import AdminUserManagementResource
 from api.resources.Admin import AdminLoginResource
 from api.resources.Alumni import AlumniAdditionResource
 from api.resources.Alumni import AlumniAccessResource
-
+from api.resources.Alumni import AlumniFilterResource
+from api.resources.Alumni import AlumniFilterOptionsResource
 
 # create an api
 api = Api(app)
@@ -19,3 +20,5 @@ api.add_resource(LoginResource, '/Login')
 # alumni
 api.add_resource(AlumniAdditionResource, '/AlumniAddition')
 api.add_resource(AlumniAccessResource, '/AlumniAccess')
+api.add_resource(AlumniFilterResource, '/AlumniFilter')
+api.add_resource(AlumniFilterOptionsResource, '/AlumniFilterOptions')

@@ -20,11 +20,12 @@ class AlumniModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100))
     last_name = db.Column(db.String(100))
-    linkedin_url = db.Column(db.String(100))
-    job_title = db.Column(db.String(100))
-    job_title_role = db.Column(db.String(100))
-    job_company_industry = db.Column(db.String(100))
-    job_company_locations_locality = db.Column(db.String(100))
+    linkedin_url = db.Column(db.String(100), nullable = True)
+    job_title = db.Column(db.String(100), nullable = True)
+    job_title_role = db.Column(db.String(100), nullable = True)
+    job_company = db.Column(db.String(100), nullable = True)
+    job_company_industry = db.Column(db.String(100), nullable = True)
+    job_company_locations_locality = db.Column(db.String(100), nullable = True)
     phone_numbers = db.relationship("PhoneNumberModel", backref="alumni")
     emails = db.relationship("EmailModel", backref="alumni")
     interests = db.relationship("InterestModel", backref="alumni")
@@ -38,7 +39,7 @@ class AlumniModel(db.Model):
 class PhoneNumberModel(db.Model):
     __tablename__ = "phone_number"
     id = db.Column(db.Integer, primary_key=True)
-    ph_number = db.Column(db.String(12))
+    ph_number = db.Column(db.String(12), nullable = True)
     alumni_id = db.Column(
         db.Integer, db.ForeignKey("alumni.id"))
 
@@ -46,7 +47,7 @@ class PhoneNumberModel(db.Model):
 class EmailModel(db.Model):
     __tablename__ = "email"
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(100))
+    email = db.Column(db.String(100), nullable = True)
     alumni_id = db.Column(
         db.Integer, db.ForeignKey("alumni.id"))
 
@@ -54,7 +55,7 @@ class EmailModel(db.Model):
 class InterestModel(db.Model):
     __tablename__ = "interest"
     id = db.Column(db.Integer, primary_key=True)
-    interest = db.Column(db.String(100))
+    interest = db.Column(db.String(100), nullable = True)
     alumni_id = db.Column(
         db.Integer, db.ForeignKey("alumni.id"))
 
@@ -63,10 +64,10 @@ class ExperienceModel(db.Model):
     __tablename__ = "experience"
     id = db.Column(db.Integer, primary_key=True)
     company = db.relationship("CompanyModel", backref="experience")
-    start_date = db.Column(db.DateTime)
-    end_date = db.Column(db.DateTime)
-    title_name = db.Column(db.String(100))
-    title_role = db.Column(db.String(100))
+    start_date = db.Column(db.DateTime, nullable = True)
+    end_date = db.Column(db.DateTime, nullable = True)
+    title_name = db.Column(db.String(100), nullable = True)
+    title_role = db.Column(db.String(100), nullable = True)
 
     alumni_id = db.Column(
         db.Integer, db.ForeignKey("alumni.id"))
@@ -75,9 +76,8 @@ class ExperienceModel(db.Model):
 class CompanyModel(db.Model):
     __tablename__ = "company"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
+    name = db.Column(db.String(100), nullable = True)
     location = db.relationship("LocationModel", backref="company")
-
     experience_id = db.Column(
         db.Integer, db.ForeignKey("experience.id"))
 
@@ -85,11 +85,11 @@ class CompanyModel(db.Model):
 class LocationModel(db.Model):
     __tablename__ = "location"
     id = db.Column(db.Integer, primary_key=True)
-    city = db.Column(db.String(100))
-    state = db.Column(db.String(100))
-    country = db.Column(db.String(100))
-    zipcode = db.Column(db.Integer)
-    locality = db.Column(db.String(100))
+    city = db.Column(db.String(100), nullable = True)
+    state = db.Column(db.String(100), nullable = True)
+    country = db.Column(db.String(100), nullable = True)
+    zipcode = db.Column(db.Integer, nullable = True)
+    locality = db.Column(db.String(100), nullable = True)
 
     company_id = db.Column(
         db.Integer, db.ForeignKey("company.id"))
@@ -98,9 +98,9 @@ class LocationModel(db.Model):
 class SchoolModel(db.Model):
     __tablename__ = "school"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    start_date = db.Column(db.DateTime)
-    end_date = db.Column(db.DateTime)
+    name = db.Column(db.String(100), nullable = True)
+    start_date = db.Column(db.DateTime, nullable = True)
+    end_date = db.Column(db.DateTime, nullable = True)
     majors = db.relationship("MajorModel", backref="school")
     minors = db.relationship("MinorModel", backref="school")
 
@@ -111,7 +111,7 @@ class SchoolModel(db.Model):
 class MajorModel(db.Model):
     __tablename__ = "major"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
+    name = db.Column(db.String(50), nullable = True)
 
     school_id = db.Column(
         db.Integer, db.ForeignKey("school.id"))
@@ -120,7 +120,7 @@ class MajorModel(db.Model):
 class MinorModel(db.Model):
     __tablename__ = "minor"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
+    name = db.Column(db.String(50), nullable = True)
 
     school_id = db.Column(
         db.Integer, db.ForeignKey("school.id"))
